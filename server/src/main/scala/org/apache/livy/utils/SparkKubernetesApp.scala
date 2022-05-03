@@ -28,8 +28,8 @@ import scala.language.postfixOps
 import scala.util.{Failure, Success, Try}
 import scala.util.control.NonFatal
 
-import io.fabric8.kubernetes.api.model._
-import io.fabric8.kubernetes.api.model.extensions.{Ingress, IngressBuilder}
+import io.fabric8.kubernetes.api.model.{Pod, Service, HasMetadata, ServiceBuilder, OwnerReferenceBuilder}
+import io.fabric8.kubernetes.api.model.networking.v1.{Ingress, IngressBuilder}
 import io.fabric8.kubernetes.client.{ConfigBuilder, _}
 import org.apache.commons.lang.StringUtils
 
@@ -491,7 +491,8 @@ private[utils] object KubernetesExtensions {
           .withName(app.getApplicationPod.getMetadata.getName)
           .tailingLines(cacheLogSize).getLog.split("\n").toIndexedSeq
       ).getOrElse(IndexedSeq.empty)
-      val ingress = client.extensions.ingresses.inNamespace(app.getApplicationNamespace)
+       
+      val ingress = client.network().v1().ingresses().inNamespace(app.getApplicationNamespace)
         .withLabel(SPARK_APP_TAG_LABEL, app.getApplicationTag)
         .list.getItems.asScala.headOption
       KubernetesAppReport(driver, executors, appLog, ingress, livyConf)
@@ -538,7 +539,7 @@ private[utils] object KubernetesExtensions {
       ) ++ additionalAnnotations
 
       val builder = new IngressBuilder()
-        .withApiVersion("extensions/v1beta1")
+        .withApiVersion("networking.k8s.io/v1")
         .withNewMetadata()
         .withName(fixResourceName(s"${app.getApplicationPod.getMetadata.getName}-ui"))
         .withNamespace(app.getApplicationNamespace)
@@ -553,8 +554,6 @@ private[utils] object KubernetesExtensions {
         .addNewPath()
         .withPath(s"/$appTag/?(.*)")
         .withNewBackend()
-        .withServiceName(service.getMetadata.getName)
-        .withNewServicePort(service.getSpec.getPorts.get(0).getName)
         .endBackend()
         .endPath()
         .endHttp()
