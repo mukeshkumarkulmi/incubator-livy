@@ -152,7 +152,8 @@ class SparkKubernetesApp private[utils] (
 
       Thread.currentThread().setName(s"kubernetesAppMonitorThread-$appId")
       listener.foreach(_.appIdKnown(appId))
-
+      
+      info("Build new ingress as per networking api")
       if (livyConf.getBoolean(LivyConf.KUBERNETES_INGRESS_CREATE)) {
         withRetry(kubernetesClient.createSparkUIIngress(app, livyConf))
       }
@@ -554,7 +555,14 @@ private[utils] object KubernetesExtensions {
         .addNewPath()
         .withPath(s"/$appTag/?(.*)")
         .withNewBackend()
+        .withNewService()
+        .withName(service.getMetadata.getName)
+        .withNewPort()
+        .withName(service.getSpec.getPorts.get(0).getName)
+        .endPort()
+        .endService()
         .endBackend()
+        .withPathType("ImplementationSpecific")
         .endPath()
         .endHttp()
         .endRule()
