@@ -106,7 +106,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <py4j.version>0.10.7</py4j.version>
     <scala-2.11.version>2.11.12</scala-2.11.version>
-    <scala-2.12.version>2.12.10</scala-2.12.version>
+    <scala-2.12.version>2.12.15</scala-2.12.version>
     <scala.binary.version>2.11</scala.binary.version>
     <scala.version>${scala-2.11.version}</scala.version>
     <scalatest.version>3.0.8</scalatest.version>
@@ -651,7 +651,7 @@
         <plugin>
           <groupId>net.alchim31.maven</groupId>
           <artifactId>scala-maven-plugin</artifactId>
-          <version>4.2.0</version>
+          <version>4.4.0</version>
           <executions>
             <execution>
               <goals>
@@ -1088,7 +1088,7 @@
           https://archive.apache.org/dist/spark/spark-3.0.0/spark-3.0.0-bin-hadoop2.7.tgz
         </spark.bin.download.url>
         <spark.bin.name>spark-3.0.0-bin-hadoop2.7</spark.bin.name>
-        <kubernetes.client.version>4.9.2</kubernetes.client.version>
+        <kubernetes.client.version>5.12.2</kubernetes.client.version>
         <jackson.version>2.10.3</jackson.version>
       </properties>
     </profile>
