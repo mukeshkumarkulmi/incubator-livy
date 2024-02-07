@@ -44,6 +44,7 @@ public class RSCConf extends ClientConf<RSCConf> {
     CLIENT_SHUTDOWN_TIMEOUT("client.shutdown-timeout", "10s"),
     DRIVER_CLASS("driver-class", null),
     SESSION_KIND("session.kind", null),
+    SESSION_INTERPRETER_THREADS("session.interpreter.threadpool.size", 1),
 
     LIVY_JARS("jars", null),
     SPARKR_PACKAGE("sparkr.package", null),
@@ -70,6 +71,9 @@ public class RSCConf extends ClientConf<RSCConf> {
 
     SASL_MECHANISMS("rpc.sasl.mechanisms", "DIGEST-MD5"),
     SASL_QOP("rpc.sasl.qop", null),
+    
+    STATEMENT_RESULT_RETAINED_TIMEOUT("result-retained.timeout", "1h"),
+    STATEMENT_RESULT_DISCARD_TIMEOUT("result-discard.timeout", "10m"),
 
     TEST_NO_CODE_COVERAGE_ANALYSIS("test.do-not-use.no-code-coverage-analysis", false),
     TEST_STUCK_END_SESSION("test.do-not-use.stuck-end-session", false),
